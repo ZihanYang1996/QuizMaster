@@ -5,6 +5,8 @@ using UnityEngine;
 public class Timer : MonoBehaviour
 {
     public bool isAnweringQuestion = false;
+    public bool loadNextQuestion;
+    public float fillFraction;
     [SerializeField] float timeToCompleteQuestion = 30f;
     [SerializeField] float timeToShowCorrectAnswer = 10f;
     float timerValue;
@@ -13,19 +15,38 @@ public class Timer : MonoBehaviour
         UpdateTimer();
     }
 
+    public void CancelTimer()
+    {
+        timerValue = 0;
+    }
+
     void UpdateTimer()
     {
         timerValue -= Time.deltaTime; // Subtract the time that has passed since the last frame
-        
-        if (timerValue <= 0 && isAnweringQuestion)
+        if (isAnweringQuestion)
         {
-            timerValue = timeToShowCorrectAnswer;
-            isAnweringQuestion = false;
+            if (timerValue > 0)
+            {
+                fillFraction = timerValue / timeToCompleteQuestion;
+            }
+            else
+            {
+                timerValue = timeToShowCorrectAnswer;
+                isAnweringQuestion = false;
+            }
         }
-        else if (timerValue <= 0 && !isAnweringQuestion)
+        else
         {
-            timerValue = timeToCompleteQuestion;
-            isAnweringQuestion = true;
+            if (timerValue > 0)
+            {
+                fillFraction = timerValue / timeToShowCorrectAnswer;
+            }
+            else
+            {
+                timerValue = timeToCompleteQuestion;
+                isAnweringQuestion = true;
+                loadNextQuestion = true;
+            }
         }
 
         Debug.Log("Timer: " + timerValue);
