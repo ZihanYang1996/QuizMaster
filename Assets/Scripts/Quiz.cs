@@ -6,13 +6,22 @@ using UnityEngine.UI;
 
 public class Quiz : MonoBehaviour
 {
+    [Header("Questions")]
     [SerializeField] TextMeshProUGUI questionText; // Use TextMeshProUGUI for UI TextMeshPro components
     [SerializeField] QuestionSO question;
+
+    [Header("Answers")]
     [SerializeField] GameObject[] answerButtons;
     int correctAnswerIndex;
+
+    [Header("Buttons")]
     [SerializeField] Color32 defaultAnswerColor = new Color32(2, 138, 152, 60);
     [SerializeField] Color32 correctAnswerColor = new Color32(138, 0, 0, 60);
 
+    [Header("Timer")]
+    [SerializeField] Image timerImage;
+    Timer timer;
+    
     void Start()
     {
         GetNextQuestion();
