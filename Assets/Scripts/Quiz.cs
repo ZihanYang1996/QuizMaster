@@ -13,6 +13,7 @@ public class Quiz : MonoBehaviour
     [Header("Answers")]
     [SerializeField] GameObject[] answerButtons;
     int correctAnswerIndex;
+    bool hasAnsweredEarly;
 
     [Header("Buttons")]
     [SerializeField] Color32 defaultAnswerColor = new Color32(2, 138, 152, 60);
@@ -32,12 +33,19 @@ public class Quiz : MonoBehaviour
     void Update()
     {
         timerImage.fillAmount = timer.fillFraction;
+        // timerImage.fillAmount = timerComponent.fillFraction; // Access the fillFraction variable from the Timer script
         if (timer.loadNextQuestion)
         {
+            hasAnsweredEarly = false; // Reset the hasAnsweredEarly variable
             GetNextQuestion();
             timer.loadNextQuestion = false;
         }
-        // timerImage.fillAmount = timerComponent.fillFraction; // Access the fillFraction variable from the Timer script
+        else if (!hasAnsweredEarly && !timer.isAnweringQuestion)
+        {
+            DisplayAnswer(-1); // Treate the answer as incorrect if the player didn't answer before the timer ran out
+            SetButtonsState(false);
+        }
+
     }
 
     private void DisplayQuestion()
@@ -78,6 +86,14 @@ public class Quiz : MonoBehaviour
 
     public void OnAnswerSelected(int index)
     {
+        hasAnsweredEarly = true; // Set hasAnsweredEarly to true when an answer is selected
+        DisplayAnswer(index);
+        SetButtonsState(false); // Disable buttons after an answer is selected
+        timer.CancelTimer(); // Reset the timer
+    }
+
+    private void DisplayAnswer(int index)
+    {
         if (index == question.GetCorrectAnswerIndex())
         {
             questionText.text = "回答正确!";
@@ -92,9 +108,5 @@ public class Quiz : MonoBehaviour
             Image buttonImage = answerButtons[correctAnswerIndex].GetComponent<Image>();
             buttonImage.color = correctAnswerColor;
         }
-        SetButtonsState(false); // Disable buttons after an answer is selected
-        timer.CancelTimer(); // Reset the timer
     }
-
-
 }
