@@ -1331,6 +1331,8 @@ MonoBehaviour:
   correctAnswerColor:
     serializedVersion: 2
     rgba: 1006633098
+  timerImage: {fileID: 641855957}
+  timer: {fileID: 1198874439}
 --- !u!1 &1198874437
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,6 +1382,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isAnweringQuestion: 0
+  loadNextQuestion: 0
+  fillFraction: 0
   timeToCompleteQuestion: 30
   timeToShowCorrectAnswer: 10
 --- !u!1 &1754094300 stripped

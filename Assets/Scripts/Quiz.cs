@@ -32,6 +32,11 @@ public class Quiz : MonoBehaviour
     void Update()
     {
         timerImage.fillAmount = timer.fillFraction;
+        if (timer.loadNextQuestion)
+        {
+            GetNextQuestion();
+            timer.loadNextQuestion = false;
+        }
         // timerImage.fillAmount = timerComponent.fillFraction; // Access the fillFraction variable from the Timer script
     }
 
@@ -88,6 +93,7 @@ public class Quiz : MonoBehaviour
             buttonImage.color = correctAnswerColor;
         }
         SetButtonsState(false); // Disable buttons after an answer is selected
+        timer.CancelTimer(); // Reset the timer
     }
 
 
