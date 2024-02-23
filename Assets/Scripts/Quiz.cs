@@ -19,12 +19,20 @@ public class Quiz : MonoBehaviour
     [SerializeField] Color32 correctAnswerColor = new Color32(138, 0, 0, 60);
 
     [Header("Timer")]
-    [SerializeField] Image timerImage;
-    Timer timer;
-    
+    [SerializeField] Image timerImage; // Reference to the Image component
+    [SerializeField] Timer timer; // Reference to the Timer script
+    // [SerializeField] GameObject timerObject; // Another way to reference the Timer script
+    // Timer timerComponent; // Reference to the Timer script
+
     void Start()
     {
         GetNextQuestion();
+        // timerComponent = timerObject.GetComponent<Timer>(); // Access the Timer script from the Timer GameObject
+    }
+    void Update()
+    {
+        timerImage.fillAmount = timer.fillFraction;
+        // timerImage.fillAmount = timerComponent.fillFraction; // Access the fillFraction variable from the Timer script
     }
 
     private void DisplayQuestion()
