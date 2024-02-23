@@ -1319,7 +1319,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questionText: {fileID: 978510832}
-  question: {fileID: 11400000, guid: f136a0cb87d589d4aa4f8b21dfaa1101, type: 2}
+  questions:
+  - {fileID: 11400000, guid: f136a0cb87d589d4aa4f8b21dfaa1101, type: 2}
+  - {fileID: 11400000, guid: ff62954e02b37bd4693b2b82ce5b3d5e, type: 2}
+  - {fileID: 11400000, guid: 271a10d0820239d4fb39c0017674b6ed, type: 2}
   answerButtons:
   - {fileID: 587567789}
   - {fileID: 246271886}

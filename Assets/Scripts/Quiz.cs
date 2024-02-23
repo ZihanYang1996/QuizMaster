@@ -8,7 +8,8 @@ public class Quiz : MonoBehaviour
 {
     [Header("Questions")]
     [SerializeField] TextMeshProUGUI questionText; // Use TextMeshProUGUI for UI TextMeshPro components
-    [SerializeField] QuestionSO question;
+    [SerializeField] List<QuestionSO> questions = new List<QuestionSO>();
+    QuestionSO currentQuestion;
 
     [Header("Answers")]
     [SerializeField] GameObject[] answerButtons;
@@ -27,7 +28,6 @@ public class Quiz : MonoBehaviour
 
     void Start()
     {
-        GetNextQuestion();
         // timerComponent = timerObject.GetComponent<Timer>(); // Access the Timer script from the Timer GameObject
     }
     void Update()
@@ -50,12 +50,12 @@ public class Quiz : MonoBehaviour
 
     private void DisplayQuestion()
     {
-        questionText.text = question.GetQuestion();
+        questionText.text = currentQuestion.GetQuestion();
 
         for (int i = 0; i < answerButtons.Length; i++)
         {
             TextMeshProUGUI buttonText = answerButtons[i].GetComponentInChildren<TextMeshProUGUI>();
-            buttonText.text = question.GetAnswers(i);
+            buttonText.text = currentQuestion.GetAnswers(i);
         }
     }
 
@@ -79,9 +79,26 @@ public class Quiz : MonoBehaviour
 
     private void GetNextQuestion()
     {
+        if (questions.Count == 0)
+        {
+            questionText.text = "没有更多问题了!";
+            SetButtonsState(false);
+            return;
+        }
         SetButtonsState(true); // Enable buttons for the next question
         SetDefaultButtonColor(); // Set default color for buttons
+        GetRandomQuestion();
         DisplayQuestion();
+    }
+
+    void GetRandomQuestion()
+    {
+        int index = Random.Range(0, questions.Count);
+        currentQuestion = questions[index];
+        if (questions.Contains(currentQuestion))
+        {
+            questions.Remove(currentQuestion); // Remove the question from the list to avoid repeating questions
+        }
     }
 
     public void OnAnswerSelected(int index)
@@ -94,7 +111,7 @@ public class Quiz : MonoBehaviour
 
     private void DisplayAnswer(int index)
     {
-        if (index == question.GetCorrectAnswerIndex())
+        if (index == currentQuestion.GetCorrectAnswerIndex())
         {
             questionText.text = "回答正确!";
             Image buttonImage = answerButtons[index].GetComponent<Image>();
@@ -102,8 +119,8 @@ public class Quiz : MonoBehaviour
         }
         else
         {
-            correctAnswerIndex = question.GetCorrectAnswerIndex();
-            string correctAnswer = question.GetAnswers(question.GetCorrectAnswerIndex());
+            correctAnswerIndex = currentQuestion.GetCorrectAnswerIndex();
+            string correctAnswer = currentQuestion.GetAnswers(currentQuestion.GetCorrectAnswerIndex());
             questionText.text = "回答错误，正确答案是:\n" + correctAnswer;
             Image buttonImage = answerButtons[correctAnswerIndex].GetComponent<Image>();
             buttonImage.color = correctAnswerColor;
