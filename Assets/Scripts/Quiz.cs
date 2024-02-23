@@ -15,6 +15,11 @@ public class Quiz : MonoBehaviour
 
     void Start()
     {
+        GetNextQuestion();
+    }
+
+    private void DisplayQuestion()
+    {
         questionText.text = question.GetQuestion();
 
         for (int i = 0; i < answerButtons.Length; i++)
@@ -22,6 +27,31 @@ public class Quiz : MonoBehaviour
             TextMeshProUGUI buttonText = answerButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             buttonText.text = question.GetAnswers(i);
         }
+    }
+
+    private void SetButtonsState(bool state)
+    {
+        for (int i = 0; i < answerButtons.Length; i++)
+        {
+            Button button = answerButtons[i].GetComponent<Button>();
+            button.interactable = state;
+        }
+    }
+
+    private void SetDefaultButtonColor()
+    {
+        for (int i = 0; i < answerButtons.Length; i++)
+        {
+            Image buttonImage = answerButtons[i].GetComponent<Image>();
+            buttonImage.color = defaultAnswerColor;
+        }
+    }
+
+    private void GetNextQuestion()
+    {
+        SetButtonsState(true); // Enable buttons for the next question
+        SetDefaultButtonColor(); // Set default color for buttons
+        DisplayQuestion();
     }
 
     public void OnAnswerSelected(int index)
@@ -40,6 +70,7 @@ public class Quiz : MonoBehaviour
             Image buttonImage = answerButtons[correctAnswerIndex].GetComponent<Image>();
             buttonImage.color = correctAnswerColor;
         }
+        SetButtonsState(false); // Disable buttons after an answer is selected
     }
 
 
