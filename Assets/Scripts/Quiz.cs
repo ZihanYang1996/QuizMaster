@@ -26,9 +26,13 @@ public class Quiz : MonoBehaviour
     // [SerializeField] GameObject timerObject; // Another way to reference the Timer script
     // Timer timerComponent; // Reference to the Timer script
 
+    [Header("Score")]
+    [SerializeField] TextMeshProUGUI scoreText;
+    ScoreKeeper scoreKeeper;
     void Start()
     {
         // timerComponent = timerObject.GetComponent<Timer>(); // Access the Timer script from the Timer GameObject
+        scoreKeeper = FindObjectOfType<ScoreKeeper>();
     }
     void Update()
     {
@@ -89,6 +93,7 @@ public class Quiz : MonoBehaviour
         SetDefaultButtonColor(); // Set default color for buttons
         GetRandomQuestion();
         DisplayQuestion();
+        scoreKeeper.IncrementQuestionsSeen();
     }
 
     void GetRandomQuestion()
@@ -107,6 +112,7 @@ public class Quiz : MonoBehaviour
         DisplayAnswer(index);
         SetButtonsState(false); // Disable buttons after an answer is selected
         timer.CancelTimer(); // Reset the timer
+        scoreText.text = "得分: " + scoreKeeper.CalculateScore() + "%";
     }
 
     private void DisplayAnswer(int index)
@@ -116,6 +122,7 @@ public class Quiz : MonoBehaviour
             questionText.text = "回答正确!";
             Image buttonImage = answerButtons[index].GetComponent<Image>();
             buttonImage.color = correctAnswerColor;
+            scoreKeeper.IncrementCorrectAnswers();
         }
         else
         {
