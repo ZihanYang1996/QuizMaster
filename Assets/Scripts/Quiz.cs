@@ -91,18 +91,23 @@ public class Quiz : MonoBehaviour
 
     private void GetNextQuestion()
     {
-        if (questions.Count == 0)
+        // Debug.Log("progressBar.value: " + progressBar.value);
+        // Debug.Log("progressBar.maxValue: " + progressBar.maxValue);
+        // Debug.Log("questions.Count: " + questions.Count);
+        if (progressBar.value == progressBar.maxValue)
         {
-            questionText.text = "没有更多问题了!";
-            SetButtonsState(false);
-            return;
+            isComplete = true;
         }
-        SetButtonsState(true); // Enable buttons for the next question
-        SetDefaultButtonColor(); // Set default color for buttons
-        GetRandomQuestion();
-        DisplayQuestion();
-        
-        scoreKeeper.IncrementQuestionsSeen();
+        if (questions.Count > 0)
+        {
+            SetButtonsState(true); // Enable buttons for the next question
+            SetDefaultButtonColor(); // Set default color for buttons
+            GetRandomQuestion();
+            DisplayQuestion();
+            progressBar.value++;
+            scoreKeeper.IncrementQuestionsSeen();
+        }
+
     }
 
     void GetRandomQuestion()
@@ -121,17 +126,11 @@ public class Quiz : MonoBehaviour
         DisplayAnswer(index);
         SetButtonsState(false); // Disable buttons after an answer is selected
         timer.CancelTimer(); // Reset the timer
-        scoreText.text = "得分: " + scoreKeeper.CalculateScore() + "%";
-
-        if (progressBar.value == progressBar.maxValue)
-        {
-            isComplete = true;
-        }
     }
 
     private void DisplayAnswer(int index)
     {
-        progressBar.value++;
+        Debug.Log("Progress bar value changed");
         if (index == currentQuestion.GetCorrectAnswerIndex())
         {
             questionText.text = "回答正确!";
@@ -147,5 +146,6 @@ public class Quiz : MonoBehaviour
             Image buttonImage = answerButtons[correctAnswerIndex].GetComponent<Image>();
             buttonImage.color = correctAnswerColor;
         }
+        scoreText.text = "得分: " + scoreKeeper.CalculateScore() + "%";
     }
 }
