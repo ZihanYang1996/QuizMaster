@@ -29,10 +29,18 @@ public class Quiz : MonoBehaviour
     [Header("Score")]
     [SerializeField] TextMeshProUGUI scoreText;
     ScoreKeeper scoreKeeper;
+
+    [Header("ProgressBar")]
+    [SerializeField] Slider progressBar;
+
+    public bool isComplete;
+
     void Start()
     {
         // timerComponent = timerObject.GetComponent<Timer>(); // Access the Timer script from the Timer GameObject
         scoreKeeper = FindObjectOfType<ScoreKeeper>();
+        progressBar.maxValue = questions.Count;
+        progressBar.value = 0;
     }
     void Update()
     {
@@ -93,6 +101,7 @@ public class Quiz : MonoBehaviour
         SetDefaultButtonColor(); // Set default color for buttons
         GetRandomQuestion();
         DisplayQuestion();
+        
         scoreKeeper.IncrementQuestionsSeen();
     }
 
@@ -113,10 +122,16 @@ public class Quiz : MonoBehaviour
         SetButtonsState(false); // Disable buttons after an answer is selected
         timer.CancelTimer(); // Reset the timer
         scoreText.text = "得分: " + scoreKeeper.CalculateScore() + "%";
+
+        if (progressBar.value == progressBar.maxValue)
+        {
+            isComplete = true;
+        }
     }
 
     private void DisplayAnswer(int index)
     {
+        progressBar.value++;
         if (index == currentQuestion.GetCorrectAnswerIndex())
         {
             questionText.text = "回答正确!";
