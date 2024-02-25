@@ -35,7 +35,7 @@ public class Quiz : MonoBehaviour
 
     public bool isComplete;
 
-    void Start()
+    void Awake()
     {
         // timerComponent = timerObject.GetComponent<Timer>(); // Access the Timer script from the Timer GameObject
         scoreKeeper = FindObjectOfType<ScoreKeeper>();
