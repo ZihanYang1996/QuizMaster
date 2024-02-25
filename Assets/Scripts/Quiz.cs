@@ -130,7 +130,6 @@ public class Quiz : MonoBehaviour
 
     private void DisplayAnswer(int index)
     {
-        Debug.Log("Progress bar value changed");
         if (index == currentQuestion.GetCorrectAnswerIndex())
         {
             questionText.text = "回答正确!";
