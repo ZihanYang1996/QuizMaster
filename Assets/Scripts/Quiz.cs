@@ -14,7 +14,7 @@ public class Quiz : MonoBehaviour
     [Header("Answers")]
     [SerializeField] GameObject[] answerButtons;
     int correctAnswerIndex;
-    bool hasAnsweredEarly;
+    bool hasAnsweredEarly = true;
 
     [Header("Buttons")]
     [SerializeField] Color32 defaultAnswerColor = new Color32(2, 138, 152, 60);
@@ -48,6 +48,11 @@ public class Quiz : MonoBehaviour
         // timerImage.fillAmount = timerComponent.fillFraction; // Access the fillFraction variable from the Timer script
         if (timer.loadNextQuestion)
         {
+            if (progressBar.value == progressBar.maxValue)
+            {
+                isComplete = true;
+                return;
+            }
             hasAnsweredEarly = false; // Reset the hasAnsweredEarly variable
             GetNextQuestion();
             timer.loadNextQuestion = false;
@@ -94,10 +99,6 @@ public class Quiz : MonoBehaviour
         // Debug.Log("progressBar.value: " + progressBar.value);
         // Debug.Log("progressBar.maxValue: " + progressBar.maxValue);
         // Debug.Log("questions.Count: " + questions.Count);
-        if (progressBar.value == progressBar.maxValue)
-        {
-            isComplete = true;
-        }
         if (questions.Count > 0)
         {
             SetButtonsState(true); // Enable buttons for the next question
